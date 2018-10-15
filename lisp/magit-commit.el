@@ -38,11 +38,6 @@
 
 ;;; Options
 
-(defcustom magit-commit-arguments nil
-  "The arguments used when committing."
-  :group 'magit-git-arguments
-  :type '(repeat (string :tag "Argument")))
-
 (defcustom magit-commit-ask-to-stage 'verbose
   "Whether to ask to stage all unstaged changes when committing and nothing is staged."
   :package-version '(magit . "2.3.0")
@@ -103,44 +98,39 @@ Also see `git-commit-post-finish-hook'."
 
 ;;; Popup
 
-(defun magit-commit-popup (&optional arg)
-  "Popup console for commit commands."
-  (interactive "P")
-  (--if-let (magit-commit-message-buffer)
-      (switch-to-buffer it)
-    (magit-invoke-popup 'magit-commit-popup nil arg)))
-
-(defvar magit-commit-popup
-  '(:variable magit-commit-arguments
-    :man-page "git-commit"
-    :switches ((?a "Stage all modified and deleted files"   "--all")
-               (?e "Allow empty commit"                     "--allow-empty")
-               (?v "Show diff of changes to be committed"   "--verbose")
-               (?h "Disable hooks"                          "--no-verify")
-               (?s "Add Signed-off-by line"                 "--signoff")
-               (?R "Claim authorship and reset author date" "--reset-author"))
-    :options  ((?A "Override the author"  "--author=")
-               (?S "Sign using gpg"       "--gpg-sign=" magit-read-gpg-secret-key)
-               (?C "Reuse commit message" "--reuse-message="
-                   magit-read-reuse-message))
-    :actions  ((?c "Commit"         magit-commit-create)
-               (?e "Extend"         magit-commit-extend)
-               (?f "Fixup"          magit-commit-fixup)
-               (?F "Instant Fixup"  magit-commit-instant-fixup) nil
-               (?w "Reword"         magit-commit-reword)
-               (?s "Squash"         magit-commit-squash)
-               (?S "Instant Squash" magit-commit-instant-squash) nil
-               (?a "Amend"          magit-commit-amend)
-               (?A "Augment"        magit-commit-augment))
-    :max-action-columns 4
-    :default-action magit-commit-create))
-
-(magit-define-popup-keys-deferred 'magit-commit-popup)
+;;;###autoload (autoload 'magit-commit "magit-commit" nil t)
+(define-transient-command magit-commit ()
+  "Create a new commit or replace an existing commit."
+  :info-manual "(magit)Initiating a Commit"
+  :man-page "git-commit"
+  ["Switches"
+   ("-a" "Stage all modified and deleted files"   "--all")
+   ("-e" "Allow empty commit"                     "--allow-empty")
+   ("-v" "Show diff of changes to be committed"   "--verbose")
+   ("-h" "Disable hooks"                          "--no-verify")
+   ("-s" "Add Signed-off-by line"                 "--signoff")
+   ("-R" "Claim authorship and reset author date" "--reset-author")]
+  ["Options"
+   ("=A" "Override the author"  "--author=")
+   ("=S" "Sign using gpg"       "--gpg-sign="      magit-read-gpg-secret-key)
+   ("=C" "Reuse commit message" "--reuse-message=" magit-read-reuse-message)]
+  ["Actions"
+   [("c" "Commit"         magit-commit-create)]
+   [("e" "Extend"         magit-commit-extend)
+    ("w" "Reword"         magit-commit-reword)
+    ("a" "Amend"          magit-commit-amend)]
+   [("f" "Fixup"          magit-commit-fixup)
+    ("s" "Squash"         magit-commit-squash)
+    ("A" "Augment"        magit-commit-augment)]
+   [("F" "Instant Fixup"  magit-commit-instant-fixup)
+    ("S" "Instant Squash" magit-commit-instant-squash)]]
+  (interactive)
+  (if-let ((buffer (magit-commit-message-buffer)))
+      (switch-to-buffer buffer)
+    (transient-setup 'magit-commit)))
 
 (defun magit-commit-arguments nil
-  (if (eq magit-current-popup 'magit-commit-popup)
-      magit-current-popup-args
-    magit-commit-arguments))
+  (transient-args 'magit-commit))
 
 (defvar magit-gpg-secret-key-hist nil)
 
