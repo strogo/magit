@@ -29,18 +29,23 @@
 
 (require 'magit)
 
-;;;###autoload (autoload 'magit-tag-popup "magit" nil t)
-(magit-define-popup magit-tag-popup
-  "Popup console for tag commands."
+;;;###autoload (autoload 'magit-tag "magit" nil t)
+(define-transient-command magit-tag ()
+  "Create or delete a tag."
   :man-page "git-tag"
-  :switches '((?a "Annotate" "--annotate")
-              (?f "Force"    "--force")
-              (?s "Sign"     "--sign"))
-  :options  '((?f "Sign"     "--local-user=" magit-read-gpg-secret-key))
-  :actions  '((?t "Create"   magit-tag-create)
-              (?k "Delete"   magit-tag-delete)
-              (?p "Prune"    magit-tag-prune))
-  :default-action 'magit-tag-create)
+  ["Switches"
+   ("-a" "Annotate" "--annotate")
+   ("-f" "Force"    "--force")
+   ("-s" "Sign"     "--sign")]
+  ["Options"
+   ("=f" "Sign as"  "--local-user=" magit-read-gpg-secret-key)]
+  ["Actions"
+   ([t]  "Create"   magit-tag-create)
+   ("k"  "Delete"   magit-tag-delete)
+   ("p"  "Prune"    magit-tag-prune)])
+
+(defun magit-tag-arguments ()
+  (transient-args 'magit-tag))
 
 ;;;###autoload
 (defun magit-tag-create (name rev &optional args)
