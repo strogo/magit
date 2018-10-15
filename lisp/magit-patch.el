@@ -120,26 +120,28 @@ is asked to pull.  START has to be reachable from that commit."
   (magit-git-insert "request-pull" start url end)
   (set-buffer-modified-p nil))
 
-;;;###autoload (autoload 'magit-patch-apply-popup "magit-patch" nil t)
-(magit-define-popup magit-patch-apply-popup
-  "Popup console for applying a patch file."
-  :man-page "git-apply"
-  :switches '((?i "Also apply to index"     "--index")
-              (?c "Only apply to index"     "--cached")
-              (?3 "Fall back on 3way merge" "--3way"))
-  :actions  '((?a "Apply patch" magit-patch-apply))
-  :default-action 'magit-patch-apply)
-
-;;;###autoload
-(defun magit-patch-apply (file &rest args)
+;;;###autoload (autoload 'magit-patch-apply "magit-patch" nil t)
+(define-transient-command magit-patch-apply (file &rest args)
   "Apply the patch file FILE."
-  (interactive (list (expand-file-name
-                      (read-file-name "Apply patch: "
-                                      default-directory nil nil
-                                      (--when-let (magit-file-at-point)
-                                        (file-relative-name it))))
-                     (magit-patch-apply-arguments)))
-  (magit-run-git "apply" args "--" (magit-convert-filename-for-git file)))
+  :man-page "git-apply"
+  ["Switches"
+   ("-i" "Also apply to index"     "--index")
+   ("-c" "Only apply to index"     "--cached")
+   ("-3" "Fall back on 3way merge" "--3way")]
+  ["Actions"
+   ("a"  "Apply patch" magit-patch-apply)]
+  (interactive
+   (if (eq transient--prefix 'magit-patch-apply)
+       (list nil)
+     (list (expand-file-name
+            (read-file-name "Apply patch: "
+                            default-directory nil nil
+                            (when-let ((file (magit-file-at-point)))
+                              (file-relative-name file))))
+           (transient-args 'magit-patch-apply))))
+  (if (not file)
+      (transient-setup 'magit-commit-absorb)
+    (magit-run-git "apply" args "--" (magit-convert-filename-for-git file))))
 
 ;;;###autoload
 (defun magit-patch-save (file &optional arg)
