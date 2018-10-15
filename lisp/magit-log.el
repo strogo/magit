@@ -915,7 +915,7 @@ to visit the commit at point.
 
 Type \\[magit-branch-popup] to see available branch commands.
 Type \\[magit-merge] to merge the branch or commit at point.
-Type \\[magit-cherry-pick-popup] to apply the commit at point.
+Type \\[magit-cherry-pick] to apply the commit at point.
 Type \\[magit-reset] to reset `HEAD' to the commit at point.
 
 \\{magit-log-mode-map}"
@@ -1530,7 +1530,7 @@ Type \\[magit-refresh] to refresh the current buffer.
 Type \\[magit-visit-thing] or \\[magit-diff-show-or-scroll-up] \
 to visit the commit at point.
 
-Type \\[magit-cherry-pick-popup] to apply the commit at point.
+Type \\[magit-cherry-pick] to apply the commit at point.
 
 \\{magit-cherry-mode-map}"
   :group 'magit-log
@@ -1588,7 +1588,7 @@ Type \\[magit-refresh] to refresh the current buffer.
 Type \\[magit-visit-thing] or \\[magit-diff-show-or-scroll-up] \
 to visit the commit at point.
 
-Type \\[magit-cherry-pick-popup] to apply the commit at point.
+Type \\[magit-cherry-pick] to apply the commit at point.
 Type \\[magit-reset] to reset `HEAD' to the commit at point.
 
 \\{magit-reflog-mode-map}"
