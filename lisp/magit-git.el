@@ -1312,6 +1312,13 @@ The amount of time spent searching is limited by
          (and (not (and non-local (equal remote ".")))
               remote))))
 
+(defun magit-get-current-remote ()
+  (or (magit-get-upstream-remote nil t)
+      (let ((remotes (magit-list-remotes)))
+        (if (= (length remotes) 1)
+            (car remotes)
+          (car (member "origin" remotes))))))
+
 (defun magit-get-push-remote (&optional branch)
   (or (and (or branch (setq branch (magit-get-current-branch)))
            (magit-get "branch" branch "pushRemote"))
