@@ -73,7 +73,7 @@ removed after restarting Emacs."
               ,@(and (not magit-push-current-set-remote-if-missing)
                      '((?u "Set upstream"  "--set-upstream"))))
   :actions '("Configure"
-             (?C "variables..."      magit-branch-config-popup)
+             (?C "variables..."      magit-branch-configure)
              (lambda ()
                (--when-let (magit-get-current-branch)
                  (concat (propertize "Push " 'face 'magit-popup-heading)
