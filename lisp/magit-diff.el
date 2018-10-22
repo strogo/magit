@@ -662,37 +662,6 @@ and `:slant'."
   :man-page "git-diff"
   :value
   (lambda ()
-    (apply #'magit--import-file-args (magit-diff-get-buffer-args)))
-  ["Options"
-   ("=f" "Limit to files" "-- " magit-read-files)
-   ("=u" "Context lines"  "-U")
-   ("=m" "Detect renames" "-M")
-   ("=c" "Detect copies"  "-C")
-   ("=a" "Diff algorithm" "--diff-algorithm="
-    magit-diff-select-algorithm)
-   ("=i" "Ignore submodules" "--ignore-submodules="
-    magit-diff-select-ignore-submodules)]
-  ["Switches"
-   ("-f" "Show surrounding functions"     "--function-context")
-   ("-b" "Ignore whitespace changes"      "--ignore-space-change")
-   ("-w" "Ignore all whitespace"          "--ignore-all-space")
-   ("-x" "Disallow external diff drivers" "--no-ext-diff")
-   ("-s" "Show stats"                     "--stat")]
-  ["Actions"
-   [("d" "Dwim"          magit-diff-dwim)
-    ("r" "Diff range"    magit-diff-range)
-    ("p" "Diff paths"    magit-diff-paths)]
-   [("u" "Diff unstaged" magit-diff-unstaged)
-    ("s" "Diff staged"   magit-diff-staged)
-    ("w" "Diff worktree" magit-diff-working-tree)]
-   [("c" "Show commit"   magit-show-commit)
-    ("t" "Show stash"    magit-stash-show)]])
-
-(define-transient-command magit-diff-buffer-file* ()
-  ""
-  :man-page "git-diff"
-  :value
-  (lambda ()
     (if-let ((file (magit-file-relative-name)))
         (magit--import-file-args
          (if-let ((buffer (magit-mode-get-buffer 'magit-diff-mode)))
@@ -700,7 +669,7 @@ and `:slant'."
                (nth 3 magit-refresh-args))
            (default-value 'magit-diff-arguments))
          (list file))
-      (user-error "Buffer isn't visiting a file")))
+      (apply #'magit--import-file-args (magit-diff-get-buffer-args))))
   ["Switches"
    ("-f" "Show surrounding functions"     "--function-context")
    ("-b" "Ignore whitespace changes"      "--ignore-space-change")
