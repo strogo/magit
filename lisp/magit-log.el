@@ -373,43 +373,6 @@ the upstream isn't ahead of the current branch) show."
   :man-page "git-log"
   :value
   (lambda ()
-    (apply #'magit--import-file-args (magit-log-get-buffer-args)))
-  ["Switches"
-   ("-g" "Show graph"              "--graph")
-   ("-c" "Show graph in color"     "--color")
-   ("-d" "Show refnames"           "--decorate")
-   ("-S" "Show signatures"         "--show-signature")
-   ("-u" "Show diffs"              "--patch")
-   ("-s" "Show diffstats"          "--stat")
-   ("-h" "Show header"             "++header" magit-log++header)
-   ("-r" "Show in reverse order"   "--reverse")
-   ("-D" "Simplify by decoration"  "--simplify-by-decoration")
-   ("-f" "Follow renames when showing single-file log" "--follow")]
-  ["Options"
-   ("=n" "Limit number of commits" "-n")
-   ("=f" "Limit to files"          "-- " magit-read-files)
-   ("=a" "Limit to author"         "--author=")
-   ("=o" "Order commits by"        "++order=" magit-log-select-order)
-   ("=g" "Search messages"         "--grep=")
-   ("=G" "Search changes"          "-G")
-   ("=S" "Search occurrences"      "-S")
-   ("=L" "Trace line evolution"    "-L" magit-read-file-trace)]
-  ["Actions"
-   [("l" "Log current"             magit-log-current)
-    ("o" "Log other"               magit-log-other)
-    ("h" "Log HEAD"                magit-log-head)]
-   [("L" "Log local branches"      magit-log-branches)
-    ("b" "Log all branches"        magit-log-all-branches)
-    ("a" "Log all references"      magit-log-all)]
-   [("r" "Reflog current"          magit-reflog-current)
-    ("O" "Reflog other"            magit-reflog-other)
-    ("H" "Reflog HEAD"             magit-reflog-head)]])
-
-(define-transient-command magit-log-buffer-file* ()
-  ""
-  :man-page "git-log"
-  :value
-  (lambda ()
     (if-let ((file (magit-file-relative-name)))
         (magit--import-file-args
          (if-let ((buffer (magit-mode-get-buffer 'magit-log-mode)))
@@ -417,7 +380,7 @@ the upstream isn't ahead of the current branch) show."
                (nth 2 magit-refresh-args))
            (default-value 'magit-log-arguments))
          (list file))
-      (user-error "Buffer isn't visiting a file"))))
+      (apply #'magit--import-file-args (magit-log-get-buffer-args))))
   ["Switches"
    ("-g" "Show graph"              "--graph")
    ("-c" "Show graph in color"     "--color")
