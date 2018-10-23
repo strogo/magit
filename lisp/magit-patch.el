@@ -69,11 +69,11 @@
    ("=o" "Output directory" "--output-directory=")
    ("=F" "Limit to files"   "-- " magit-read-files)]
   ["Actions"
-   ("p"  "Format patches"   magit-format-patch)
+   ("p"  "Format patches"   magit-patch-create)
    ("r"  "Request pull"     magit-request-pull)])
 
 ;;;###autoload
-(defun magit-format-patch (range args files)
+(defun magit-patch-create (range args files)
   "Create patches for the commits in RANGE.
 When a single commit is given for RANGE, create a patch for the
 changes introduced by that commit (unlike 'git format-patch'
