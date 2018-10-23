@@ -37,7 +37,8 @@
   :man-page "git-worktree"
   [["Create new"
     ("b" "worktree"              magit-worktree-checkout)
-    ("c" "branch and worktree"   magit-worktree-branch)]
+    ("c" "branch and worktree"   magit-worktree-branch)
+    ("p" "pull-request worktree" forge-checkout-worktree)]
    ["Commands"
     ("k" "Delete worktree"       magit-worktree-delete)
     ("g" "Visit worktree"        magit-worktree-status)]])
