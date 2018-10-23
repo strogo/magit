@@ -99,26 +99,6 @@ which creates patches for all commits that are reachable from
                     args)
             topdir))))))
 
-;;;###autoload
-(defun magit-request-pull (url start end)
-  "Request upstream to pull from you public repository.
-
-URL is the url of your publically accessible repository.
-START is a commit that already is in the upstream repository.
-END is the last commit, usually a branch name, which upstream
-is asked to pull.  START has to be reachable from that commit."
-  (interactive
-   (list (magit-get "remote" (magit-read-remote "Remote") "url")
-         (magit-read-branch-or-commit "Start" (magit-get-upstream-branch))
-         (magit-read-branch-or-commit "End")))
-  (let ((dir default-directory))
-    ;; mu4e changes default-directory
-    (compose-mail)
-    (setq default-directory dir))
-  (message-goto-body)
-  (magit-git-insert "request-pull" start url end)
-  (set-buffer-modified-p nil))
-
 ;;;###autoload (autoload 'magit-patch-apply "magit-patch" nil t)
 (define-transient-command magit-patch-apply (file &rest args)
   "Apply the patch file FILE."
@@ -183,6 +163,26 @@ same differences as those shown in the buffer are always used."
     (with-temp-file file
       (magit-git-insert "diff" rev "-p" const args "--" files)))
   (magit-refresh))
+
+;;;###autoload
+(defun magit-request-pull (url start end)
+  "Request upstream to pull from you public repository.
+
+URL is the url of your publically accessible repository.
+START is a commit that already is in the upstream repository.
+END is the last commit, usually a branch name, which upstream
+is asked to pull.  START has to be reachable from that commit."
+  (interactive
+   (list (magit-get "remote" (magit-read-remote "Remote") "url")
+         (magit-read-branch-or-commit "Start" (magit-get-upstream-branch))
+         (magit-read-branch-or-commit "End")))
+  (let ((dir default-directory))
+    ;; mu4e changes default-directory
+    (compose-mail)
+    (setq default-directory dir))
+  (message-goto-body)
+  (magit-git-insert "request-pull" start url end)
+  (set-buffer-modified-p nil))
 
 ;;; _
 (provide 'magit-patch)
