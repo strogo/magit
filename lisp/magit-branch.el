@@ -216,11 +216,13 @@ has to be used to view and change branch related variables."
     ("l" "local branch"      magit-branch-checkout)
     ("c" "new branch"        magit-branch-and-checkout)
     ("w" "new worktree"      magit-worktree-checkout)
+    ("y" "pull-request"      forge-checkout-pullreq)
     ("b" "dwim"              magit-checkout)]
    ["Create"
     ("s" "new spin-off"      magit-branch-spinoff)
     ("n" "new branch"        magit-branch-create)
-    ("W" "new worktree"      magit-worktree-branch)]
+    ("W" "new worktree"      magit-worktree-branch)
+    ("Y" "from pull-request" forge-branch-pullreq)]
    ["Do"
     ("C" "configure..."      magit-branch-configure :transient t)
     ("m" "rename"            magit-branch-rename)
