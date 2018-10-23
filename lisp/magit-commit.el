@@ -123,7 +123,8 @@ Also see `git-commit-post-finish-hook'."
     ("s" "Squash"         magit-commit-squash)
     ("A" "Augment"        magit-commit-augment)]
    [("F" "Instant Fixup"  magit-commit-instant-fixup)
-    ("S" "Instant Squash" magit-commit-instant-squash)]]
+    ("S" "Instant Squash" magit-commit-instant-squash)
+    ("x" "Absorb"         magit-commit-absorb)]]
   (interactive)
   (if-let ((buffer (magit-commit-message-buffer)))
       (switch-to-buffer buffer)
