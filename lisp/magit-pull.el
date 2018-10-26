@@ -65,7 +65,8 @@
    :predicate (lambda () magit-pull-or-fetch)
    ("o" "another branch"    magit-fetch-branch)
    ("s" "explicit refspec"  magit-fetch-refspec)
-   ("m" "submodules"        magit-fetch-modules)]
+   ("m" "submodules"        magit-fetch-modules)
+   ("y" "forge"             forge-pull)]
   (interactive)
   (transient-setup 'magit-pull nil :scope (magit-get-current-branch)))
 
