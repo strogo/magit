@@ -64,7 +64,8 @@ Ignored for Git versions before v2.8.0."
   ["Fetch"
    ("o" "another branch"   magit-fetch-branch)
    ("r" "explicit refspec" magit-fetch-refspec)
-   ("m" "submodules"       magit-fetch-modules)])
+   ("m" "submodules"       magit-fetch-modules)
+   ("y" "forge"            forge-pull)])
 
 (defun magit-fetch-arguments ()
   (transient-args 'magit-fetch))
