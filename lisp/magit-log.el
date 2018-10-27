@@ -410,7 +410,9 @@ the upstream isn't ahead of the current branch) show."
     ("a" "Log all references"      magit-log-all)]
    [("r" "Reflog current"          magit-reflog-current)
     ("O" "Reflog other"            magit-reflog-other)
-    ("H" "Reflog HEAD"             magit-reflog-head)]])
+    ("H" "Reflog HEAD"             magit-reflog-head)]
+   [("i" "Log index wipref"        magit-wip-log-index)
+    ("w" "Log worktree wipref"     magit-wip-log-worktree)]])
 
 (define-transient-command magit-log-refresh ()
   "Change the arguments used for the log(s) in the current buffer."
@@ -461,7 +463,8 @@ the upstream isn't ahead of the current branch) show."
    ["Margin"
     ("L" "toggle visibility"        magit-toggle-margin)
     ("l" "cycle style"              magit-cycle-margin-style)
-    ("d" "toggle details"           magit-toggle-margin-details)]])
+    ("d" "toggle details"           magit-toggle-margin-details)
+    ("x" "toggle shortstat"         magit-toggle-log-margin-style)]])
 
 (defun magit-log-get-buffer-args ()
   (cond ((and magit-use-sticky-arguments

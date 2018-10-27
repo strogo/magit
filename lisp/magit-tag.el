@@ -42,7 +42,8 @@
   ["Actions"
    ([t]  "Create"   magit-tag-create)
    ("k"  "Delete"   magit-tag-delete)
-   ("p"  "Prune"    magit-tag-prune)])
+   ("p"  "Prune"    magit-tag-prune)
+   ("r"  "Create release" magit-tag-release)])
 
 (defun magit-tag-arguments ()
   (transient-args 'magit-tag))
