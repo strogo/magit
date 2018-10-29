@@ -38,6 +38,9 @@
 (require 'magit-process)
 (require 'magit-autorevert)
 
+(when (magit--libgit-available-p)
+  (require 'magit-libgit))
+
 (defgroup magit nil
   "Controlling Git from Emacs."
   :link '(url-link "https://magit.vc")
