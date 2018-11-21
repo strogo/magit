@@ -55,6 +55,15 @@ has to be used to view and change remote related variables."
   :group 'magit-commands
   :type 'boolean)
 
+(defcustom magit-remote-set-if-missing t
+  "Whether to configure a missing remote before trying to act on it."
+  :package-version '(magit . "2.6.0")
+  :group 'magit-commands
+  :type '(choice
+          (const :tag "don't set" nil)
+          (const :tag "set (using branch.<name>.pushRemote for push-target)" t)
+          (const :tag "set (using remote.pushDefault for push-target" default)))
+
 ;;;; Commands
 
 ;;;###autoload (autoload 'magit-remote "magit-remote" nil t)
