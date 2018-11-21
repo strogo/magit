@@ -54,18 +54,8 @@
        (concat (propertize "Push " 'face 'transient-heading)
                (propertize branch  'face 'magit-branch-local)
                (propertize " to"   'face 'transient-heading))))
-   ("p"
-    magit-push-current-to-pushremote
-    :predicate (lambda ()
-                 (or (magit-get-push-branch)
-                     magit-remote-set-if-missing))
-    :description magit--push-current-to-pushremote-desc)
-   ("u"
-    magit-push-current-to-upstream
-    :predicate (lambda ()
-                 (or (magit-get-upstream-branch)
-                     magit-remote-set-if-missing))
-    :description magit--push-current-to-upstream-desc)
+   ("p" magit-push-current-to-pushremote)
+   ("u" magit-push-current-to-upstream)
    ("e" "elsewhere" magit-push-current)]
   ["Push"
    [("o" "another branch"    magit-push-other)
@@ -84,8 +74,9 @@
     (magit-run-git-async "push" "-v" args remote
                          (format "%s:refs/heads/%s" branch target))))
 
-;;;###autoload
-(defun magit-push-current-to-pushremote (args &optional set-remote)
+;;;###autoload (autoload 'magit-push-current-to-pushremote "magit-push" nil t)
+(define-suffix-command magit-push-current-to-pushremote
+  (args &optional set-remote)
   "Push the current branch to `branch.<name>.pushRemote'.
 If that variable is unset, then push to `remote.pushDefault'.
 
@@ -93,6 +84,8 @@ When `magit-remote-set-if-missing' is non-nil and
 the push-remote is not configured, then read the push-remote from
 the user, set it, and then push to it.  With a prefix argument
 the push-remote can be changed before pushed to it."
+  :predicate (lambda () (or (magit-get-push-branch) magit-remote-set-if-missing))
+  :description 'magit--push-current-to-pushremote-desc
   (interactive
    (list (magit-push-arguments)
          (and (magit--push-current-set-pushremote-p current-prefix-arg)
@@ -134,14 +127,17 @@ the push-remote can be changed before pushed to it."
                   'face 'bold)
                  ", after setting that"))))
 
-;;;###autoload
-(defun magit-push-current-to-upstream (args &optional set-remote)
+;;;###autoload (autoload 'magit-push-current-to-upstream "magit-push" nil t)
+(define-suffix-command magit-push-current-to-upstream
+  (args &optional set-remote)
   "Push the current branch to its upstream branch.
 
 When `magit-remote-set-if-missing' is non-nil and
 the upstream is not configured, then read the upstream from the
 user, set it, and then push to it.  With a prefix argument the
 upstream can be changed before pushed to it."
+  :predicate (lambda () (or (magit-get-upstream-branch) magit-remote-set-if-missing))
+  :description 'magit--push-current-to-upstream-desc
   (interactive
    (list (magit-push-arguments)
          (and (magit--push-current-set-upstream-p current-prefix-arg)
