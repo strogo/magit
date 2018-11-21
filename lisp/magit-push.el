@@ -85,7 +85,7 @@
                          (format "%s:refs/heads/%s" branch target))))
 
 ;;;###autoload
-(defun magit-push-current-to-pushremote (args &optional push-remote)
+(defun magit-push-current-to-pushremote (args &optional set-remote)
   "Push the current branch to `branch.<name>.pushRemote'.
 If that variable is unset, then push to `remote.pushDefault'.
 
@@ -101,18 +101,18 @@ the push-remote can be changed before pushed to it."
                    "Set `remote.pushDefault' and push there"
                  (format "Set `branch.%s.pushRemote' and push there"
                          (magit-get-current-branch)))))))
-  (--if-let (magit-get-current-branch)
-      (progn (when push-remote
+  (if-let ((branch (magit-get-current-branch)))
+      (progn (when set-remote
                (setf (magit-get
                       (if (eq magit-remote-set-if-missing 'default)
                           "remote.pushDefault"
-                        (format "branch.%s.pushRemote" it)))
-                     push-remote))
-             (if-let ((remote (magit-get-push-remote it)))
+                        (format "branch.%s.pushRemote" branch)))
+                     set-remote))
+             (if-let ((remote (magit-get-push-remote branch)))
                  (if (member remote (magit-list-remotes))
-                     (magit-git-push it (concat remote "/" it) args)
+                     (magit-git-push branch (concat remote "/" branch) args)
                    (user-error "Remote `%s' doesn't exist" remote))
-               (user-error "No push-remote is configured for %s" it)))
+               (user-error "No push-remote is configured for %s" branch)))
     (user-error "No branch is checked out")))
 
 (defun magit--push-current-set-pushremote-p (&optional change)
@@ -135,7 +135,7 @@ the push-remote can be changed before pushed to it."
                  ", after setting that"))))
 
 ;;;###autoload
-(defun magit-push-current-to-upstream (args &optional upstream)
+(defun magit-push-current-to-upstream (args &optional set-remote)
   "Push the current branch to its upstream branch.
 
 When `magit-remote-set-if-missing' is non-nil and
@@ -146,13 +146,13 @@ upstream can be changed before pushed to it."
    (list (magit-push-arguments)
          (and (magit--push-current-set-upstream-p current-prefix-arg)
               (magit-read-upstream-branch))))
-  (--if-let (magit-get-current-branch)
+  (if-let ((branch (magit-get-current-branch)))
       (progn
-        (when upstream
-          (magit-set-upstream-branch it upstream))
-        (if-let ((target (magit-get-upstream-branch it)))
-            (magit-git-push it target args)
-          (user-error "No upstream is configured for %s" it)))
+        (when set-remote
+          (magit-set-upstream-branch branch set-remote))
+        (if-let ((target (magit-get-upstream-branch branch)))
+            (magit-git-push branch target args)
+          (user-error "No upstream is configured for %s" branch)))
     (user-error "No branch is checked out")))
 
 (defun magit--push-current-set-upstream-p (&optional change)
