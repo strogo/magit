@@ -122,14 +122,17 @@ the push-remote can be changed before pushed to it."
        (magit-get-current-branch)))
 
 (defun magit--push-current-to-pushremote-desc ()
-  (or (magit-get-push-branch)
-      (and (magit--push-current-set-pushremote-p)
-           (concat (propertize
-                    (if (eq magit-remote-set-if-missing 'default)
-                        "pushDefault"
-                      "pushRemote")
-                    'face 'bold)
-                   ", after setting that"))))
+  (if-let ((branch (magit-get-push-branch)))
+      (if (magit-rev-verify branch)
+          branch
+        (concat branch ", creating it"))
+    (and (magit--push-current-set-pushremote-p)
+         (concat (propertize
+                  (if (eq magit-remote-set-if-missing 'default)
+                      "pushDefault"
+                    "pushRemote")
+                  'face 'bold)
+                 ", after setting that"))))
 
 ;;;###autoload
 (defun magit-push-current-to-upstream (args &optional upstream)
@@ -159,10 +162,13 @@ upstream can be changed before pushed to it."
        (magit-get-current-branch)))
 
 (defun magit--push-current-to-upstream-desc ()
-  (or (magit-get-upstream-branch)
-      (and (magit--push-current-set-upstream-p)
-           (concat (propertize "@{upstream}" 'face 'bold)
-                   ", after setting that"))))
+  (if-let ((branch (magit-get-upstream-branch)))
+      (if (magit-rev-verify branch)
+          branch
+        (concat branch ", creating it"))
+    (and (magit--push-current-set-upstream-p)
+         (concat (propertize "@{upstream}" 'face 'bold)
+                 ", after setting that"))))
 
 ;;;###autoload
 (defun magit-push-current (target args)
